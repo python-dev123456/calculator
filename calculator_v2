@@ -1,0 +1,180 @@
+from tkinter import *
+from tkinter.messagebox import * 
+
+first_number = 0
+op = ''
+second_number = 0
+just_calculated = False
+
+calc = Tk()
+calc.title('Калькулятор')
+calc.geometry('1000x1000+500+100')
+calc.config(bg="#1B1A1A")
+
+
+
+
+def clear():
+    ent.config(state='normal')  
+    ent.delete(0, END)
+    ent.config(state='readonly')
+def plus():
+    global first_number, op
+    first_number = float(ent.get())
+    ent.config(state='normal')
+    op = '+'
+    ent.delete(0, END)
+    ent.config(state='readonly')
+def minus():
+    global first_number, op
+    first_number = float(ent.get())
+    op = '-'
+    ent.delete(0, END)
+def multi():
+    global first_number, op
+    first_number = float(ent.get())
+    op = '*'
+    ent.delete(0, END)
+def dilit():
+    global first_number, op
+    first_number = float(ent.get())
+    op = '/'
+    ent.delete(0, END)
+def stepen():
+    global first_number, op
+    first_number = float(ent.get())
+    op = '^'
+    ent.delete(0, END)
+def result():
+    global just_calculated, op, first_number, second_number
+    w = 0
+    second_number = float(ent.get())
+    if op == '+':
+        w = first_number + second_number
+    elif op == '-':
+        w = first_number - second_number
+    elif op == '*':
+        w = first_number * second_number
+    elif op == '/':
+        w = first_number / second_number
+    elif op == '^':
+        w = first_number ** second_number
+    ent.config(state='normal')
+    ent.delete(0, END)
+    ent.insert(0, str(w))
+    ent.config(state='readonly')
+    just_calculated = True
+    first_number = w
+    second_number = w
+
+def check():
+    global just_calculated
+    if just_calculated == True:
+        ent.config(state='normal')
+        ent.delete(0, END)
+        ent.config(state='readonly')
+
+
+
+
+def one():
+    ent.config(state='normal')
+    x = 1
+    ent.insert(END, x)
+    ent.config(state='readonly')
+def two():
+    ent.config(state='normal')
+    x = 2
+    ent.insert(END, x)
+    ent.config(state='readonly')
+def three():
+    ent.config(state='normal')
+    x = 3
+    ent.insert(END, x)
+    ent.config(state='readonly')
+def four():
+    ent.config(state='normal')
+    x = 4
+    ent.insert(END, x)
+    ent.config(state='readonly')
+def five():
+    ent.config(state='normal')
+    x = 5
+    ent.insert(END, x)
+    ent.config(state='readonly')
+def six():
+    ent.config(state='normal')
+    x = 6
+    ent.insert(END, x)
+    ent.config(state='readonly')
+def seven():
+    ent.config(state='normal')
+    x = 7
+    ent.insert(END, x)
+    ent.config(state='readonly')
+def eight():
+    ent.config(state='normal')
+    x = 8
+    ent.insert(END, x)
+    ent.config(state='readonly')
+def nine():
+    ent.config(state='normal')
+    x = 9
+    ent.insert(END, x)
+    ent.config(state='readonly')
+def zero():
+    ent.config(state='normal')
+    x = 0
+    ent.insert(END, x)
+    ent.config(state='readonly')
+
+
+
+ent = Entry(font=('Arial 15'))
+ent.config(state='readonly')
+ent.grid(column=0, row=1, padx=20, pady=20, ipady=15)
+
+
+btn = Button(text='+', command=plus)
+btn.config(width=4, height=2)
+btn.grid(column=1, row=1)
+btn1 = Button(text='-', command=minus)
+btn1.config(width=4, height=2)
+btn1.grid(column=2, row=1)
+btn2 = Button(text='*', command=multi)
+btn2.config(width=4, height=2)
+btn2.grid(column=1, row=2, padx=60)
+btn3 = Button(text=':', command=dilit)
+btn3.config(width=4, height=2)
+btn3.grid(column=2, row=2, padx=60)
+btn_sq = Button(text='^', command=stepen, width=4, height=2)
+btn_sq.grid(column=1, row=3, padx=60)
+btn_c = Button(text='AC', command=clear, width=8, height=5)
+btn_c.grid(column=0, row=3)
+btn_one = Button(text='1', width=4, height=2, command=one)
+btn_one.grid(column=0, row=6, pady=25)
+btn_two = Button(text='2', width=4, height=2, command=two)
+btn_two.grid(column=1, row=6, pady=25)
+btn_three = Button(text='3', width=4, height=2, command=three)
+btn_three.grid(column=2, row=6, pady=25)
+btn_four = Button(text='4', width=4, height=2, command=four)
+btn_four.grid(column=0, row=7, pady=25)
+btn_five = Button(text='5', width=4, height=2, command=five)
+btn_five.grid(column=1, row=7, pady=25)
+btn_six = Button(text='6', width=4, height=2, command=six)
+btn_six.grid(column=2, row=7, pady=25)
+btn_seven = Button(text='7', width=4, height=2, command=seven)
+btn_seven.grid(column=0, row=8, pady=25)
+btn_eight = Button(text='8', width=4, height=2, command=eight)
+btn_eight.grid(column=1, row=8, pady=25)
+btn_nine = Button(text='9', width=4, height=2, command=nine)
+btn_nine.grid(column=2, row=8, pady=25)
+btn_zero = Button(text='0', width=4, height=2, command=zero)
+btn_zero.grid(column=1, row=9, pady=25)
+btn_result = Button(text='=', command=result, width=4, height=2)
+btn_result.grid(column=2, row=3)
+
+
+
+
+calc.mainloop()
