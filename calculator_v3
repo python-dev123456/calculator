@@ -1,0 +1,173 @@
+from tkinter import *
+from tkinter import messagebox
+from tkinter import ttk
+
+first_number = 0
+op = ''
+second_number = 0
+just_calculated = False
+
+calc = Tk()
+calc.title('Calculator')
+calc.geometry('460x800+700+75')
+calc.config(bg="#1B1A1A")
+
+
+
+
+def clear():
+    ent.config(state='normal')  
+    ent.delete(0, END)
+    ent.config(state='readonly')
+def plus():
+    global first_number, op
+    first_number = float(ent.get())
+    ent.config(state='normal')
+    op = '+'
+    ent.delete(0, END)
+    ent.config(state='readonly')
+def minus():
+    global first_number, op
+    first_number = float(ent.get())
+    ent.config(state='normal')
+    op = '-'
+    ent.delete(0, END)
+    ent.config(state='readonly')
+def multi():
+    global first_number, op
+    first_number = float(ent.get())
+    ent.config(state='normal')
+    op = '*'
+    ent.delete(0, END)
+    ent.config(state='readonly')
+def dilit():
+    global first_number, op
+    first_number = float(ent.get())
+    ent.config(state='normal')
+    op = '/'
+    ent.delete(0, END)
+    ent.config(state='readonly')
+def stepen():
+    global first_number, op
+    first_number = float(ent.get())
+    ent.config(state='normal')
+    op = '^'
+    ent.delete(0, END)
+    ent.config(state='readonly')
+def plmn():
+    plmn_x = False
+    ent.config(state='normal')
+    ent.insert(0, '-')
+    plmn_x = True
+    # if plmn_x == True:
+    #     ent.delete('-', 0)
+    ent.config(state='readonly')
+
+
+def result():
+    global just_calculated, op, first_number, second_number
+    w = 0
+    second_number = float(ent.get())
+    if op == '+':
+        w = first_number + second_number
+    elif op == '-':
+        w = first_number - second_number
+    elif op == '*':
+        w = first_number * second_number
+    elif op == '/':
+        if second_number == 0:
+            messagebox.showerror('Ошибка', 'На ноль делить нельзя')
+    elif op == '^':
+        w = first_number ** second_number
+    elif first_number == '' and second_number == '':
+        messagebox.showinfo('Информация', 'Введите число')
+    ent.config(state='normal')
+    ent.delete(0, END)
+    ent.insert(0, str(w))
+    ent.config(state='readonly')
+    # just_calculated = True
+    # first_number = w
+    # second_number = w
+
+def check():
+    global just_calculated
+    if just_calculated == True:
+        ent.config(state='normal')
+        ent.delete(0, END)
+        ent.config(state='readonly')
+
+def add_number(x):
+    ent.config(state='normal')
+    ent.insert(END, x)
+    ent.config(state='readonly')
+
+
+
+
+ent = Entry(font=('Arial 15'))
+ent.config(state='readonly', readonlybackground='#1B1A1A', bd=0, foreground= '#00FFD5')
+ent.grid(column=0, row=0, padx=20, pady=20, ipady=15, ipadx=100)
+
+
+btn = Button(text='+', command=plus)
+btn.config(font=('Arial 30'), width=4, bg='#1B1A1A', fg="#00FFD5", bd=0)
+btn.grid(column=0, row=1, sticky=E, padx=20)
+
+btn1 = Button(text='-', command=minus)
+btn1.config(font=('Arial 30'), width=4, bg='#1B1A1A', fg="#00FFD5", bd=0)
+btn1.grid(column=0, row=2, sticky=E, padx=20)
+
+btn2 = Button(text='*', command=multi)
+btn2.config(font=('Arial 30'), width=4, bg='#1B1A1A', fg="#00FFD5", bd=0)
+btn2.grid(column=0, row=3, sticky=E, padx=20)
+
+btn3 = Button(text=':', command=dilit)
+btn3.config(font=('Arial 30'), width=4, bg='#1B1A1A', fg="#00FFD5", bd=0)
+btn3.grid(column=0, row=4, sticky=E, padx=20)
+
+btn_sq = Button(text='^', command=stepen, font=('Arial 30'), width=4, bg='#1B1A1A', fg="#00FFD5", bd=0)
+btn_sq.grid(column=0, row=5, sticky=E, padx=20)
+
+btn_c = Button(text='AC', command=clear, font=('Arial 30'), width=4, bg='#1B1A1A', fg="#00FFD5", bd=0)
+btn_c.grid(column=0, row=7, sticky=E, padx=20)
+
+btn_one = Button(text='1', width=6, height=2, command=lambda: add_number(1),font=('Arial 15'), bg='#1B1A1A', fg="#00FFD5", bd=0)
+btn_one.grid(column=0, row=2, sticky=W, padx=20)
+
+btn_two = Button(text='2', width=6, height=2, command=lambda: add_number(2),font=('Arial 15'), bg='#1B1A1A', fg="#00FFD5", bd=0)
+btn_two.grid(column=0, row=2, sticky=W, padx=95)
+
+btn_three = Button(text='3', width=6, height=2, command=lambda: add_number(3),font=('Arial 15'), bg='#1B1A1A', fg="#00FFD5", bd=0)
+btn_three.grid(column=0, row=2, sticky=W, padx=170)
+
+btn_four = Button(text='4', width=6, height=2, command=lambda: add_number(4),font=('Arial 15'), bg='#1B1A1A', fg="#00FFD5", bd=0)
+btn_four.grid(column=0, row=3, sticky=W, padx=20)
+
+btn_five = Button(text='5', width=6, height=2, command=lambda: add_number(5),font=('Arial 15'), bg='#1B1A1A', fg="#00FFD5", bd=0)
+btn_five.grid(column=0, row=3, sticky=W, padx=95)
+
+btn_six = Button(text='6', width=6, height=2, command=lambda: add_number(6),font=('Arial 15'), bg='#1B1A1A', fg="#00FFD5", bd=0)
+btn_six.grid(column=0, row=3, sticky=W, padx=170)
+
+btn_seven = Button(text='7', width=6, height=2, command=lambda: add_number(7),font=('Arial 15'), bg='#1B1A1A', fg="#00FFD5", bd=0)
+btn_seven.grid(column=0, row=4, sticky=W, padx=20)
+
+btn_eight = Button(text='8', width=6, height=2, command=lambda: add_number(8),font=('Arial 15'), bg='#1B1A1A', fg="#00FFD5", bd=0)
+btn_eight.grid(column=0, row=4, sticky=W, padx=95)
+
+btn_nine = Button(text='9', width=6, height=2, command=lambda: add_number(9),font=('Arial 15'), bg='#1B1A1A', fg="#00FFD5", bd=0)
+btn_nine.grid(column=0, row=4, sticky=W, padx=170)
+
+btn_zero = Button(text='0', width=6, height=2, command=lambda: add_number(0),font=('Arial 15'), bg='#1B1A1A', fg="#00FFD5", bd=0)
+btn_zero.grid(column=0, row=5, sticky=W, padx=95)
+
+btn_result = Button(text='=', command=result, font=('Arial 30'), bg='#1B1A1A', fg="#00FFD5", width=4, bd=0)
+btn_result.grid(column=0, row=6, sticky=E, padx=20)
+
+btn_plmn = Button(text='+/-', command=plmn, font=('Arial 30'), bg='#1B1A1A', fg="#00FFD5", width=4, bd=0)
+btn_plmn.grid(column=0, row=1, sticky=E, padx=100)
+
+
+
+
+calc.mainloop()
