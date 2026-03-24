@@ -1,6 +1,9 @@
 from tkinter import *
 from tkinter import messagebox
 from tkinter import ttk
+import requests
+
+
 
 first_number = 0
 op = ''
@@ -10,7 +13,20 @@ just_calculated = False
 calc = Tk()
 calc.title('Calculator')
 calc.geometry('460x800+700+75')
-calc.config(bg="#1B1A1A")
+calc.config(bg="#1B1A1A", highlightthickness=0, highlightbackground='#1B1A1A')
+
+
+
+notebook = ttk.Notebook()
+notebook.pack()
+frame_calc = Frame(notebook, bg='#1B1A1A', highlightbackground='#1B1A1A', bd=0, )
+frame_conv = Frame(notebook, bg='#1B1A1A', highlightbackground='#1B1A1A', bd=0)
+notebook.add(frame_calc, text='Калькулятор')
+notebook.add(frame_conv, text='Конвертер')
+style = ttk.Style()
+style.theme_use('clam')
+style.configure('TNotebook', background='#1B1A1A', borderwidth=0)
+style.configure('TNotebook.Tab', background='#1B1A1A')
 
 
 
@@ -54,19 +70,25 @@ def stepen():
     op = '^'
     ent.delete(0, END)
     ent.config(state='readonly')
-def plmn():
-    plmn_x = False
+def sqrt():
+    global first_number, op
+    first_number = float(ent.get())
     ent.config(state='normal')
-    ent.insert(0, '-')
-    plmn_x = True
-    # if plmn_x == True:
-    #     ent.delete('-', 0)
+    w = first_number ** 0.5
+    ent.delete(0, END)
+    ent.insert(0, str(w))
     ent.config(state='readonly')
+
 
 
 def result():
     global just_calculated, op, first_number, second_number
     w = 0
+    try:
+        first_number = float(ent.get())
+        second_number = float(ent.get())
+    except ValueError:
+        messagebox.showerror('Ошибка', 'Введите числа')
     second_number = float(ent.get())
     if op == '+':
         w = first_number + second_number
@@ -79,15 +101,11 @@ def result():
             messagebox.showerror('Ошибка', 'На ноль делить нельзя')
     elif op == '^':
         w = first_number ** second_number
-    elif first_number == '' and second_number == '':
-        messagebox.showinfo('Информация', 'Введите число')
+
     ent.config(state='normal')
     ent.delete(0, END)
     ent.insert(0, str(w))
     ent.config(state='readonly')
-    # just_calculated = True
-    # first_number = w
-    # second_number = w
 
 def check():
     global just_calculated
@@ -101,71 +119,134 @@ def add_number(x):
     ent.insert(END, x)
     ent.config(state='readonly')
 
+def add_c():
+    x = cmb_c.get()
+    ent_c.config(state='normal')
+    ent_c.delete(0, END)
+    ent_c.insert(END, x)
+    ent_c.config(state='readonly')
+
+def add_c1():
+    x1 = cmb_c1.get()
+    ent_c1.config(state='normal')
+    ent_c1.delete(0, END)
+    ent_c1.insert(END, x1)
+    ent_c1.config(state='readonly')
+
+def conv():
+    a = ent_c.get()
+    b = ent_c1.get()
+    response = requests.get(f"https://open.er-api.com/v6/latest/{a}")
+    data = response.json()
+    d1 = data['rates'][f'{a}']
+    d2 = data['rates'][f'{b}']
+    lbl_conv = Label(frame_conv, text=f'{d1} {a} = {d2} {b}', width=30, height=5, bg='#1B1A1A', fg='#00FFD5', font=('Arial 10'))
+    lbl_conv.grid(column=0, row=4, columnspan=3, rowspan=2)
 
 
 
-ent = Entry(font=('Arial 15'))
+
+ent = Entry(frame_calc, font=('Arial 15'))
 ent.config(state='readonly', readonlybackground='#1B1A1A', bd=0, foreground= '#00FFD5')
-ent.grid(column=0, row=0, padx=20, pady=20, ipady=15, ipadx=100)
+ent.grid(column=0, row=0, padx=20, pady=20, ipady=15, ipadx=100, columnspan=6)
 
 
-btn = Button(text='+', command=plus)
+btn = Button(frame_calc, text='+', command=plus)
 btn.config(font=('Arial 30'), width=4, bg='#1B1A1A', fg="#00FFD5", bd=0)
-btn.grid(column=0, row=1, sticky=E, padx=20)
+btn.grid(column=4, row=1)
 
-btn1 = Button(text='-', command=minus)
+btn1 = Button(frame_calc, text='-', command=minus)
 btn1.config(font=('Arial 30'), width=4, bg='#1B1A1A', fg="#00FFD5", bd=0)
-btn1.grid(column=0, row=2, sticky=E, padx=20)
+btn1.grid(column=5, row=1)
 
-btn2 = Button(text='*', command=multi)
+btn2 = Button(frame_calc, text='*', command=multi)
 btn2.config(font=('Arial 30'), width=4, bg='#1B1A1A', fg="#00FFD5", bd=0)
-btn2.grid(column=0, row=3, sticky=E, padx=20)
+btn2.grid(column=4, row=2)
 
-btn3 = Button(text=':', command=dilit)
+btn3 = Button(frame_calc, text=':', command=dilit)
 btn3.config(font=('Arial 30'), width=4, bg='#1B1A1A', fg="#00FFD5", bd=0)
-btn3.grid(column=0, row=4, sticky=E, padx=20)
+btn3.grid(column=5, row=2)
 
-btn_sq = Button(text='^', command=stepen, font=('Arial 30'), width=4, bg='#1B1A1A', fg="#00FFD5", bd=0)
-btn_sq.grid(column=0, row=5, sticky=E, padx=20)
+btn_sq = Button(frame_calc, text='^', command=stepen, font=('Arial 30'), width=4, bg='#1B1A1A', fg="#00FFD5", bd=0)
+btn_sq.grid(column=4, row=3)
 
-btn_c = Button(text='AC', command=clear, font=('Arial 30'), width=4, bg='#1B1A1A', fg="#00FFD5", bd=0)
-btn_c.grid(column=0, row=7, sticky=E, padx=20)
+btn_sqrt = Button(frame_calc, text='√', command=sqrt, font=('Arial 30'), width=4, bg='#1B1A1A', fg="#00FFD5", bd=0)
+btn_sqrt.grid(column=5, row=3)
 
-btn_one = Button(text='1', width=6, height=2, command=lambda: add_number(1),font=('Arial 15'), bg='#1B1A1A', fg="#00FFD5", bd=0)
-btn_one.grid(column=0, row=2, sticky=W, padx=20)
+btn_c = Button(frame_calc, text='AC', command=clear, font=('Arial 30'), width=4, bg='#1B1A1A', fg="#00FFD5", bd=0)
+btn_c.grid(column=4, row=5, columnspan=2, sticky=NSEW)
 
-btn_two = Button(text='2', width=6, height=2, command=lambda: add_number(2),font=('Arial 15'), bg='#1B1A1A', fg="#00FFD5", bd=0)
-btn_two.grid(column=0, row=2, sticky=W, padx=95)
+btn_one = Button(frame_calc, text='1', width=6, height=2, command=lambda: add_number(1),font=('Arial 15'), bg='#1B1A1A', fg="#00FFD5", bd=0)
+btn_one.grid(column=0, row=1)
 
-btn_three = Button(text='3', width=6, height=2, command=lambda: add_number(3),font=('Arial 15'), bg='#1B1A1A', fg="#00FFD5", bd=0)
-btn_three.grid(column=0, row=2, sticky=W, padx=170)
+btn_two = Button(frame_calc, text='2', width=6, height=2, command=lambda: add_number(2),font=('Arial 15'), bg='#1B1A1A', fg="#00FFD5", bd=0)
+btn_two.grid(column=1, row=1)
 
-btn_four = Button(text='4', width=6, height=2, command=lambda: add_number(4),font=('Arial 15'), bg='#1B1A1A', fg="#00FFD5", bd=0)
-btn_four.grid(column=0, row=3, sticky=W, padx=20)
+btn_three = Button(frame_calc, text='3', width=6, height=2, command=lambda: add_number(3),font=('Arial 15'), bg='#1B1A1A', fg="#00FFD5", bd=0)
+btn_three.grid(column=2, row=1)
 
-btn_five = Button(text='5', width=6, height=2, command=lambda: add_number(5),font=('Arial 15'), bg='#1B1A1A', fg="#00FFD5", bd=0)
-btn_five.grid(column=0, row=3, sticky=W, padx=95)
+btn_four = Button(frame_calc, text='4', width=6, height=2, command=lambda: add_number(4),font=('Arial 15'), bg='#1B1A1A', fg="#00FFD5", bd=0)
+btn_four.grid(column=0, row=2)
 
-btn_six = Button(text='6', width=6, height=2, command=lambda: add_number(6),font=('Arial 15'), bg='#1B1A1A', fg="#00FFD5", bd=0)
-btn_six.grid(column=0, row=3, sticky=W, padx=170)
+btn_five = Button(frame_calc, text='5', width=6, height=2, command=lambda: add_number(5),font=('Arial 15'), bg='#1B1A1A', fg="#00FFD5", bd=0)
+btn_five.grid(column=1, row=2)
 
-btn_seven = Button(text='7', width=6, height=2, command=lambda: add_number(7),font=('Arial 15'), bg='#1B1A1A', fg="#00FFD5", bd=0)
-btn_seven.grid(column=0, row=4, sticky=W, padx=20)
+btn_six = Button(frame_calc, text='6', width=6, height=2, command=lambda: add_number(6),font=('Arial 15'), bg='#1B1A1A', fg="#00FFD5", bd=0)
+btn_six.grid(column=2, row=2)
 
-btn_eight = Button(text='8', width=6, height=2, command=lambda: add_number(8),font=('Arial 15'), bg='#1B1A1A', fg="#00FFD5", bd=0)
-btn_eight.grid(column=0, row=4, sticky=W, padx=95)
+btn_seven = Button(frame_calc, text='7', width=6, height=2, command=lambda: add_number(7),font=('Arial 15'), bg='#1B1A1A', fg="#00FFD5", bd=0)
+btn_seven.grid(column=0, row=3)
 
-btn_nine = Button(text='9', width=6, height=2, command=lambda: add_number(9),font=('Arial 15'), bg='#1B1A1A', fg="#00FFD5", bd=0)
-btn_nine.grid(column=0, row=4, sticky=W, padx=170)
+btn_eight = Button(frame_calc, text='8', width=6, height=2, command=lambda: add_number(8),font=('Arial 15'), bg='#1B1A1A', fg="#00FFD5", bd=0)
+btn_eight.grid(column=1, row=3)
 
-btn_zero = Button(text='0', width=6, height=2, command=lambda: add_number(0),font=('Arial 15'), bg='#1B1A1A', fg="#00FFD5", bd=0)
-btn_zero.grid(column=0, row=5, sticky=W, padx=95)
+btn_nine = Button(frame_calc, text='9', width=6, height=2, command=lambda: add_number(9),font=('Arial 15'), bg='#1B1A1A', fg="#00FFD5", bd=0)
+btn_nine.grid(column=2, row=3)
 
-btn_result = Button(text='=', command=result, font=('Arial 30'), bg='#1B1A1A', fg="#00FFD5", width=4, bd=0)
-btn_result.grid(column=0, row=6, sticky=E, padx=20)
+btn_zero = Button(frame_calc, text='0', width=6, height=2, command=lambda: add_number(0),font=('Arial 15'), bg='#1B1A1A', fg="#00FFD5", bd=0)
+btn_zero.grid(column=1, row=4)
 
-btn_plmn = Button(text='+/-', command=plmn, font=('Arial 30'), bg='#1B1A1A', fg="#00FFD5", width=4, bd=0)
-btn_plmn.grid(column=0, row=1, sticky=E, padx=100)
+btn_result = Button(frame_calc, text='=', command=result, font=('Arial 30'), bg='#1B1A1A', fg="#00FFD5", width=4, bd=0)
+btn_result.grid(column=4, row=4, columnspan=2, sticky=NSEW)
+
+
+
+
+
+
+response = requests.get("https://open.er-api.com/v6/latest/USD")
+data = response.json()
+
+
+
+ent_c = Entry(frame_conv, state='readonly')
+ent_c.grid(column=0, row=0)
+
+
+
+curs = ['USD', 'RUB', 'EUR']
+curs2 = ['RUB', 'EUR', 'USD']
+
+cmb_c = ttk.Combobox(frame_conv, values=curs, state='readonly')
+cmb_c.grid(column=1, row=0)
+
+btn_cur = Button(frame_conv, text='Добавить', command=add_c)
+btn_cur.grid(column=2, row=0)
+
+btn_cur1 = Button(frame_conv ,text='Конвертировать', width=30, command=conv)
+btn_cur1.grid(column=0, row=1, columnspan=3)
+
+cmb_c1 = ttk.Combobox(frame_conv, values=curs2, state='readonly')
+cmb_c1.grid(column=1, row=2)
+
+btn_cur2 = Button(frame_conv, text='Добавить', command=add_c1)
+btn_cur2.grid(column=2, row=2)
+
+ent_c1 = Entry(frame_conv, state='readonly')
+ent_c1.grid(column=0, row=2)
+
+
+
 
 
 
